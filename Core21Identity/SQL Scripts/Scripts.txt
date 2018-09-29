@@ -1,0 +1,3 @@
+﻿Insert Into UserPlanType (Name, Description, Days) Values ('30Day', '30-Day Membership', 30)
+Insert Into UserPlanType (Name, Description, Days) Values ('60Day', '60-Day Membership', 60)
+Insert Into UserPlanType (Name, Description, Days) Values ('1Year', '1-Year Membership', 365)

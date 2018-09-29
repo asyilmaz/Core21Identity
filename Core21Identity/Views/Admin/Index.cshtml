@@ -4,8 +4,8 @@
 }
 
 <div class="bg-info">
-    <h2>This page is just for admins to create user roles and permissions. Just click once and never click again. </h2>
-    <h3>This page coded to show how roles and permissions are being created by code. </h3>
+    <h2>This page is just for admins to create user roles and permissions. </h2>
+    <h3>This page was coded in order to show how roles and permissions are being created by code. </h3>
 </div>
 
 <table class="table table-bordered table-striped">
@@ -17,7 +17,7 @@
             Role Name
         </th>
     </tr>
-    @if (Model.Count() == 0)
+    @if (Model.Roles.Count() == 0)
     {
         <tr>
             <td colspan="2" class="text-center">No Roles</td>
@@ -25,16 +25,16 @@
     }
     else
     {
-        foreach (var role in Model)
+        foreach (var role in Model.Roles)
         {
-            <tr>
-                <td>@role</td>
-
-            </tr>
+        <tr>
+            <td>@role.Id</td>
+            <td>@role.Name</td>
+        </tr>
         }
     }
 </table>
-@if (Model.Count() > 0)
+@if (Model.Roles.Count() == 0)
 {
     <a asp-action="CreateRoles" class="btn btn-primary">
         Create Roles

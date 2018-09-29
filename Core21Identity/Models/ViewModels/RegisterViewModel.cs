@@ -15,8 +15,9 @@ namespace Core21Identity.Models
         [Required]
         public string Email { get; set; }
         [Required]
-        public int UserType { get; set; }
-        public int UserPlan { get; set; }
+        public int UserTypeId { get; set; }
+        public int UserPlanDays { get; set; }
+        public List<UserPlanType> UserPlanTypes { get; set; }
     }
 
 }

@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core21Identity.Models
 {
-    public class ApplicationUserRole : IdentityRole
+    public class AdminViewModel
     {
+        public IEnumerable<ApplicationRole> Roles { get; set; }
     }
 }
