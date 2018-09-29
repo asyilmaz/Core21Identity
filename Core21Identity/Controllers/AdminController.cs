@@ -2,19 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core21Identity.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core21Identity.Controllers
 {
     public class AdminController : Controller
     {
+        private RoleManager<ApplicationRole> _roleManager;
+
+        public AdminController(RoleManager<ApplicationRole> roleManager)
+        {
+            _roleManager = roleManager;
+        }
         public IActionResult Index()
         {
-            return View();
+            AdminViewModel adminViewModel = new AdminViewModel();
+            adminViewModel.Roles = _roleManager.Roles;
+            return View(adminViewModel);
         }
-        public IActionResult CreateRoles()
+        public async Task<IActionResult> CreateRoles()
         {
-            return View();
+            await _roleManager.CreateAsync(new ApplicationRole() { Name = "Free" });
+            await _roleManager.CreateAsync(new ApplicationRole() { Name = "Premium" });
+            return RedirectToAction("Index");
         }
     }
 }

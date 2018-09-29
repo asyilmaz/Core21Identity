@@ -18,14 +18,45 @@
 
     <div class="form-group">
         <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" />
+        <input type="password" asp-for="Password" class="form-control" />
     </div>
 
     <div class="form-group">
-        <label asp-for="Email">Email</label>
+        <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="UserTypeId"></label>
+        <select asp-for="UserTypeId" class="form-control">
+            <option value="1">Free</option>
+            <option value="2">Premium</option>
+        </select>
+    </div>
+    <div id="divSelect" class="form-group" style="display: none;">
+        <label asp-for="UserPlanDays"></label>
+        <select asp-for="UserPlanDays" class="form-control">
+            @foreach (var userPlanType in Model.UserPlanTypes)
+            {
+                <option value="@userPlanType.Days">@userPlanType.Description</option>
+            }
+        </select>
     </div>
     <input type="submit" class="btn btn-primary" value="Submit" />
     <input type="submit" asp-controller="Home" asp-action="Index" class="btn btn-danger" value="Cancel" />
 </form>
 
+<script type="text/javascript">
+    $('select[name="UserTypeId"]').change(function () {
+        var value = parseInt(this.value);
+        if (value === 1) {
+            $('#divSelect').hide();
+        }
+        else if (value === 2) {
+            $('#divSelect').show();
+        }
+    });
+
+    $('select[name="UserTypeId"] > option[value="@Model.UserTypeId"]').prop("selected", true);
+    $('select[name="UserPlanDays"] > option[value="@Model.UserPlanDays"]').prop("selected", true);
+    $('select[name="UserTypeId"]').change();
+</script>

@@ -13,6 +13,7 @@ using Core21Identity.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Core21Identity.Models;
+using System.Security.Claims;
 
 namespace Core21Identity
 {
@@ -38,9 +39,24 @@ namespace Core21Identity
             services.AddDbContext<ApplicationIdentityDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("PremiumPolicy", policy =>
+                {
+                    policy.RequireAuthenticatedUser()
+                          .RequireRole("Premium");
+                });
+
+                options.AddPolicy("FreePolicy", policy =>
+                {
+                    policy.RequireAuthenticatedUser()
+                          .RequireRole("Free");
+                });
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
