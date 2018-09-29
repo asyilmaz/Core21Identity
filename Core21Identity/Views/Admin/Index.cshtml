@@ -1,0 +1,42 @@
+﻿@model AdminViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="bg-info">
+    <h2>This page is just for admins to create user roles and permissions. Just click once and never click again. </h2>
+    <h3>This page coded to show how roles and permissions are being created by code. </h3>
+</div>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>
+            Role Id
+        </th>
+        <th>
+            Role Name
+        </th>
+    </tr>
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="2" class="text-center">No Roles</td>
+        </tr>
+    }
+    else
+    {
+        foreach (var role in Model)
+        {
+            <tr>
+                <td>@role</td>
+
+            </tr>
+        }
+    }
+</table>
+@if (Model.Count() > 0)
+{
+    <a asp-action="CreateRoles" class="btn btn-primary">
+        Create Roles
+    </a>
+}
