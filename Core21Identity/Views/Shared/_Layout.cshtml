@@ -55,7 +55,7 @@
                     @if ((await AuthorizationService.AuthorizeAsync(User, "FreePolicy")).Succeeded)
                     {
                         <li><a style="color:lightgreen" asp-area="" asp-controller="AAppsPubsPats" asp-action="Index">AApps/Pubs/Pats</a></li>
-                        <li><a style="color:gold;" asp-controller="Register" asp-action="Upgrade">Become a Premium Member!</a></li>
+                        <li><a style="color:gold;" asp-controller="Profile" asp-action="Index">Become a Premium Member!</a></li>
                     }
                     }
                     @if ((await AuthorizationService.AuthorizeAsync(User, "PremiumPolicy")).Succeeded)
