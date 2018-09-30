@@ -1,7 +1,137 @@
-﻿
+﻿@model ProfileViewModel
+@using Microsoft.Extensions.Options
+@inject IOptions<StripeSettings> Stripe
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Your Profile</h2>
+<style>
+    .moblist_prf {
+        width: 100%;
+        padding: 0;
+    }
 
+        .moblist_prf li {
+            float: left;
+            list-style: none;
+            display: inline;
+        }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="text-center">Your Profile</h3>
+    </div>
+    <div class="panel-body">
+        <div class="col-xs-12 text-center">
+            <div style="padding-bottom:10px;float:right;">
+                <ul class="moblist_prf">
+                    <li><a href="" data-original-title="Edit this user" class="btn btn-info btn-sm" type="button">Edit Your Profile</a></li>
+                    <li><a href="" data-original-title="Change Password" class="btn btn-danger btn-sm" type="button">Change Password</a></li>
+                    <li><a href="" data-original-title="Order History" class="btn btn-success btn-sm" type="button">Order History</a></li>
+                </ul>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <tbody>
+
+                <tr>
+                    <td>UserName</td>
+                    <td>@Model.UserName</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <td>Roles</td>
+                    <td>@Model.Roles</td>
+                </tr>
+                @* If User is not a Free User, show dates. *@
+                @if (Model.UserTypeId != 1)
+                {
+                    <tr>
+                        <td>User Plan Start Date</td>
+                        <td>@Model.UserPlanStartDate</td>
+                    </tr>
+                    <tr>
+                        <td>User Plan Expire Date</td>
+                        <td>@Model.UserPlanExpireDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@if (Model.UserTypeId == 1)
+{
+    <script src="//checkout.stripe.com/v2/checkout.js"></script>
+    <form id="stripe" asp-controller="Payment" asp-action="Charge" method="POST">
+        <div id="divSelect">
+            <div class="form-group">
+                <label for="days">Select a membership plan</label>
+                <select name="days" class="form-control">
+                    @foreach (var userPlanType in Model.UserPlanTypes)
+                    {
+                        <option value="@userPlanType.Days">@userPlanType.Description</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="stripeAmount">You are about to pay : </label>
+                <input class="" type="text" name="stripeAmount" id="stripeAmount" disabled />$
+            </div>
+            <input style="display:none;" value="" id="stripeToken" name="stripeToken" />
+            <input style="display:none;" value="@Model.Email" id="stripeEmail" name="stripeEmail" />
+            <div class="btn-group">
+                <button class="btn btn-primary" id="customButton">Purchase</button>
+            </div>
+
+        </div>
+
+        <script type="text/javascript">
+            $('select[name="days"]').change(function () {
+
+                var value = parseInt(this.value);
+                $('#stripeAmount').val(value);
+            });
+
+            $('select[name="days"]').change();
+
+        </script>
+        <script>
+        var handler = StripeCheckout.configure({
+            key: '@Stripe.Value.PublishableKey',
+            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            locale: 'auto',
+            token: function (token) {
+                $('input#stripeToken').val(token.id);
+                $('input#stripeAmount').val(getAmount());
+
+                $('#stripe').submit();
+
+            }
+        });
+
+        document.getElementById('customButton').addEventListener('click', function (e) {
+            // Open Checkout with further options:
+            handler.open({
+                name: 'bigpatentdata.com',
+                description: 'You are about to pay.',
+                email: '@Model.Email',
+                amount: getAmount()
+            });
+            e.preventDefault();
+        });
+
+        // Close Checkout on page navigation:
+        window.addEventListener('popstate', function () {
+            handler.close();
+        });
+
+        function getAmount() {
+            return parseInt($('#stripeAmount').val()) * 100;
+        }
+        </script>
+    </form>
+}

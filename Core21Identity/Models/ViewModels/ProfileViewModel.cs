@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core21Identity.Models.ViewModels
+namespace Core21Identity.Models
 {
     public class ProfileViewModel
     {
@@ -11,8 +11,14 @@ namespace Core21Identity.Models.ViewModels
 
         public string Email { get; set; }
 
-        public string UserPlanStartDate { get; set; }
+        public string Roles { get; set; }
 
-        public string UserPlanExpireDate { get; set; }
+        public DateTime? UserPlanStartDate { get; set; }
+
+        public DateTime? UserPlanExpireDate { get; set; }
+
+        public int UserTypeId { get; set; }
+
+        public List<UserPlanType> UserPlanTypes { get; set; }
     }
 }

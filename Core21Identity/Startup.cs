@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Core21Identity.Models;
 using System.Security.Claims;
+using Stripe;
 
 namespace Core21Identity
 {
@@ -59,6 +60,8 @@ namespace Core21Identity
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,6 +90,8 @@ namespace Core21Identity
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe")["SecretKey"]);
         }
     }
 }
